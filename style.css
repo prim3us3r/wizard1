@@ -1,0 +1,279 @@
+/* Main site formatting */
+body {
+  font-family: Garamond, serif;
+  font-size: 12px;
+  justify-content: center;
+  align-items: center;
+  background-color:#0f0e40;
+  background-image: 
+    radial-gradient(at 0% 0%, rgb(255, 0, 0) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, rgb(250, 0, 146) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, rgb(118, 2, 250) 0, transparent 50%);
+    min-height: 100vh;
+  color: white;
+  overflow-x: hidden !important;
+}
+
+
+/* Top Navigation Bar formatting */
+/* Move the top navigation bar to the middle of the screen */
+.topnav {
+  font-weight: bold;
+  margin-left: 25%;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+
+/* Minting image and minting information container */
+.box {
+  margin-top: 30px;
+  margin-left: 37%;
+  max-width: 25%;
+  text-align: center;
+}
+
+/* Minting image and minting information inside the container */
+.box > *, .minter > *{
+  width: 100% !important;
+  margin-bottom: 10px;
+}
+
+/* Minting dropdown on mint.html */
+.nice-select {
+  width: 100%;
+  margin-bottom: 10px;
+  color: black;
+}
+
+.nice-select-dropdown {
+  width: 100%;
+}
+
+/* Minting button on mint.html */
+button {
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 10px;
+  border: none;
+}
+
+
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+}
+
+/* Format links */
+a {
+  color: royalblue;
+  text-decoration: none;
+  display: block;
+}
+
+/* Format labels on mint.html */
+.label {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Format h1 tags */
+h1 {
+  margin: 0;
+  font-size: 30px;
+  box-sizing: border-box;
+  letter-spacing: -1px;
+}
+
+/* Format h1 link tags */
+h1 a {
+  color: white;
+}
+
+/* Format invite class */
+.invite {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  text-align: left;
+  color: white;
+  font-size: 16px;
+}
+
+/* Format invites class link tags */
+.invites a {
+  color: white;
+}
+
+/* Format invites class */
+.invites {
+  text-align: center;
+}
+
+/* Format table tags */
+table {
+  width: 100%;
+  table-layout: fixed;
+  overflow-wrap: break-word;
+  display: table !important;
+  margin-top: 10px;
+}
+
+/* Format td and th tags */
+td, th {
+  padding: 5px;
+  font-size: 14px;
+}
+
+/* Format th tags */
+th {
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Format tr tags */
+tr {
+  width: 100%;
+  border-bottom: 1px solid white;
+}
+
+/* Format btn class */
+.btn {
+  background: rgba(0,0,0,0.8); 
+  padding: 5px 10px;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.btn:hover {
+  background-color: #04AA6D;
+}
+
+/* Format hidden class */
+.hidden {
+  display: none !important;
+}
+
+/* Format loading class */
+.loading {
+  padding: 20px;
+  box-sizing: border-box;
+  font-size: 15px;
+  background: rgba(255,255,255,0.1);
+  margin-top: 20px;
+  border-radius: 50px;
+}
+
+/* Format tr img tags */
+tr img {
+  height: 20px;
+}
+
+/* Format tr a tags */
+tr a {
+  color: white;
+}
+
+/* Format token class */
+.token {
+  background: rgba(0,0,0,0.3);
+  padding: 5px;
+  text-align: center;
+  font-size: 12px;
+}
+
+/* Format Sections */
+.section {
+  font-size: large;
+  font-weight: bold;
+  margin-top: 10px;
+  padding-top: 30px;
+  text-align: center;
+}
+
+/* Format About */
+#about p {
+  text-align: center;
+  white-space: pre-line;
+}
+
+/* Format About */
+#roadmap p {
+  text-align: center;
+  white-space: pre-line;
+}
+
+/* Format About */
+#team p {
+  text-align: center;
+  white-space: pre-line;
+}
+
+.left {
+  width: 50%;
+  height: 700px;
+  float: left;
+  align-content: center;
+}
+
+.right {
+  width: 50%;
+  height: 700px;
+  float: right;
+  align-content: center;
+}
+
+.left-faq {
+  width: 30%;
+  height: 100px;
+  float: left;
+  align-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.left-faq p {
+  white-space: pre-line;
+}
+
+.right-faq {
+  width: 70%;
+  height: 100px;
+  float: right;
+  align-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.left-faq p {
+  white-space: pre-line;
+}
+
+.socials button {
+  background-color: white;
+  color: black;
+  border: 2px solid #4CAF50; /* Green */
+}

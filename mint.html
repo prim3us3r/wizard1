@@ -1,0 +1,298 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+<script src="https://unpkg.com/nice-select2@1.0.0/dist/js/nice-select2.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" rel="stylesheet">
+<link href="https://unpkg.com/nice-select2@1.0.0/dist/css/nice-select2.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.0-rc.0/web3.min.js"></script>
+<script src="https://unpkg.com/f0js@0.0.12/dist/f0.js"></script>
+<script id="template" type="text/x-handlebars-template">
+  <img src="{{image}}">
+  <h1><a href=".">{{title}}</a></h1>
+  <div class='label'>{{price}}</div>
+  <div class='label'>{{current}}/{{supply}}</div>
+  <div class='minter'>
+    <table class='invites'>
+      <tr>
+        <th>Mint Count</th>
+        <th>Mint Now</th>
+      </tr>
+        <tr>
+          <td>
+            <select id='count'>
+              <option value="" selected disabled hidden>Select mint count</option>
+              {{#each items}}
+              <option value={{count}}>{{count}}</option>
+              {{/each}}
+            </select>
+          </td>
+          <td>
+            <button class='btn' id='mint'>Mint</button>
+          </td>
+        </tr>
+      </table>
+  </div>
+  <div class='console'></div>
+  <div class='loading hidden'>
+    <i class="fa-solid fa-chevron-up fa-flip"></i> minting...
+  </div>
+</script>
+<script id="mint-template" type="text/x-handlebars-template">
+<table class='table'>
+<tr>
+  <th><img src="opensea.png"></th>
+  <th><img src="rarible.png"></th>
+</tr>
+{{#each items}}
+<tr>
+  <td><a class='token' target="_blank" href="{{opensea}}">token #{{tokenId}}</a></td>
+  <td><a class='token' target="_blank" href="{{rarible}}">token #{{tokenId}}</a></td>
+</tr>
+{{/each}}
+</table>
+</script>
+<script>
+const f0 = new F0()
+const { key, address } = f0.parseURL(location.href)
+const template = Handlebars.compile(document.querySelector("#template").innerHTML);
+const mintTemplate = Handlebars.compile(document.querySelector("#mint-template").innerHTML);
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.ethereum.send('eth_requestAccounts');
+  let c = await fetch("box.json").then((r) => {
+    return r.json()
+  })
+  try {
+    await f0.init({
+      web3: new Web3(window.ethereum),
+      contract: address,
+      network: c.network
+    })
+    let invite = await f0.invite(key)
+    let placeholder = await f0.placeholder()
+    const name = await f0.name()
+    const symbol = await f0.symbol()
+    const nextId = await f0.nextId()
+    const config = await f0.config()
+    let items = []
+    for(let i=1; i<=invite.condition.converted.limit; i++) {
+      items.push(i)
+    }
+    document.querySelector(".box").innerHTML = template({
+      image: placeholder.converted.image,
+      title: `Mint a WonderlandWizard`,
+      items: items.map((item) => { return { count: item } }),
+      max: invite.condition.converted.limit,
+      price: `${invite.condition.converted.eth} ETH`,
+      current: nextId,
+      supply: config.converted.supply,
+      account: f0.account,
+      key: key,
+    })
+    NiceSelect.bind(document.querySelector("select"))
+    document.querySelector("#mint").addEventListener("click", async (e) => {
+      document.querySelector(".minter").classList.add("hidden")
+      document.querySelector(".loading").classList.remove("hidden")
+      let count = parseInt(document.querySelector("#count").value)
+      if (count === 0) {
+        alert("Please enter a number greater than 0")
+      } else {
+        let tokens = await f0.mint(key, count)
+        document.querySelector(".loading").classList.add("hidden")
+        document.querySelector(".console").innerHTML = mintTemplate({
+          items: tokens.map((token) => {
+            return {
+              opensea: token.links.opensea,
+              rarible: token.links.rarible,
+              tokenId: token.tokenId
+            }
+          })
+        })
+      }
+    })
+  } catch (e) {
+    document.querySelector(".box").innerHTML = `<h1>${e.message.toLowerCase()}</h1>`
+  }
+})
+</script>
+<script async src='/cdn-cgi/bm/cv/669835187/api.js'></script><script async src='/cdn-cgi/bm/cv/669835187/api.js'></script></head>
+<body>
+
+<div class="topnav">
+  <a href="https://wonderlandwizard.xyz">Home</a>
+  <a class="active" href="#">Mint</a>
+  <a href="#roadmap" style="max-width: 1200px;">Roadmap</a>
+  <a href="#about" style="max-width: 1200px;">About</a>
+  <a href="#faq" style="max-width: 1200px;">FAQ</a>
+  <a href="https://twitter.com/WonderlandWNFT" target="_blank" style="max-width: 1200px;">Twitter</a>
+  <a href="https://discord.com/invite/3CWNRK4dhK" target="_blank" style="max-width: 1200px;">Discord</a>
+  <a href="https://linktr.ee/wonderlandWNFT" target="_blank" style="max-width: 1200px;">LinkTree</a>
+  <a href="https://opensea.io/collection/wonderlandwizards" target="_blank" style="max-width: 1200px;">OpenSea</a>
+</div>
+
+<div class='box'>
+</div>
+
+<div class='section' id='roadmap'>
+  <h1>Roadmap</h1>
+
+  <div class="left">
+    <p>
+      <img src="./Images/1001.png" style="width: 600px; height: 600px;"/>
+    </p>
+  </div>
+  <div class="right">
+    <p style="text-align: left;">
+      TL;DR
+      
+      Phase 1
+      Release all of our social media accounts
+      Release the art
+      Release the website
+      Marketing
+      
+      Phase 2
+      Start the pre sale mint
+      Start the public sale mint
+
+      Phase 3
+
+      Diversify the funds from the mint into several projects to earn yield        
+      Give the link to the wallet so that the holders can follow the wallet if they wish
+
+      Phase 4        
+      Hold the first vote
+      Commence with the first giveaway
+    </p>
+  </div>
+  
+</div>
+
+<div class='section' id='about'>
+  <h1>About</h1>
+
+  <div class="left" style="text-align: justify;">
+    <p>
+      WonderlandWizards is a collection of 5000 wizards on the Ethereum blockchain designed to bring holders rewards weekly. All funds from mint will be distributed into several different yield bearing tokens/projects to generate income for holders. 50% of the rewards generated will be given out so that the treasury can compound. WonderlandWizard holders will be giving the chance to vote weekly, in which they will be able to vote how many holders win the rewards for that respective week.
+
+      For all those who want to know the ins and outs of WonderlandWizards we have curated this in-depth description:
+
+      When creating WonderlandWizards we wanted to build an NFT that held intrinsic value via utility, while also maintaining a sustainable mechanism for growth, as we plan to be here for a very long time. This is why we went with the Ethereum blockchain despite the high gas fees. Although the gas fees are frustrating it seems as though NFTs that hold their value, live on the Ethereum blockchain.
+    </p>
+  </div>
+  <div class="right">
+    <p>
+      <img src="./Images/574.png"style="width: 600px; height: 600px;" />
+    </p>
+  </div>
+  
+</div>  
+
+<div class='section' id='faq'>
+  <h1>FAQ</h1>
+
+  <div>
+    <div class="left-faq">
+      <p style="text-align: justify; margin-left: 10%;">
+        <h3>The minting process</h3>
+      </p>
+    </div>
+
+    <div class="right-faq">
+      <p style="text-align: left;">
+        The pre-sale mint will start at 0.02ETH and the public sale will be 0.05ETH. 
+
+        After all the NFTs have sold out we will distribute the funds into several different projects (we are open for suggestions) that have been thoroughly researched to make sure we maximize gains for the holders. The wallet address will be posted on Twitter and Discord for those who wish to keep track of the investments.
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <div class="left-faq">
+      <p style="text-align: justify; margin-left: 10%;">
+        <h3>How does the giveaway work?</h3>
+      </p>
+    </div>
+
+    <div class="right-faq">
+      <p style="text-align: left;">
+        All the voting will be done off-chain to avoid any gas fees. All holders will be asked to verify their wallet on discord which will give you access to a ‘holders only’ channel. In the holders-only channel, we will run a vote every week so the holders can decide how many people are going to win the prize for that respective week. It could be the case that the profits generated are distributed evenly to all holders or it could be that one person wins.
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <div class="left-faq">
+      <p style="text-align: justify; margin-left: 10%;">
+        <h3>How much will be given away?</h3>
+      </p>
+    </div>
+
+    <div class="right-faq">
+      <p style="text-align: left;">
+        Every week we will give away 50% of all profits generated so that the treasury can continue to compound, thus the amount given away each week will increase which in turn should increase the resell value of the NFT should someone ever want to sell it.
+      </p>
+    </div>
+  </div>    
+
+  <div>
+    <div class="left-faq">
+      <p style="text-align: justify; margin-left: 10%;">
+        <h3>Does holding more wizards give you more chances?</h3>
+      </p>
+    </div>
+
+    <div class="right-faq">
+      <p style="text-align: left;">
+        Holding more wizards does give you more chances as we will run the numbers 1-5000 through a random number generator. Unfortunately, there is no way around this. For this reason, we have capped the amount you can mint at 10 per wallet.
+      </p>
+    </div>
+  </div>    
+
+  <div>
+    <div class="left-faq">
+      <p style="text-align: justify; margin-left: 10%;">
+        <h3>What are the royalty fees?</h3>
+      </p>
+    </div>
+
+    <div class="right-faq">
+      <p style="text-align: left;">
+        There will be a 7% royalty fee on all purchases from the secondary market. 5% will go to the team and 2% will be given to charity. The charity will be chosen by the community and will be proven on-chain.
+      </p>
+    </div>
+  </div>       
+
+  <div>
+    <div class="left-faq">
+      <p style="text-align: justify; margin-left: 10%;">
+        <h3>How many NFTs are there?</h3>
+      </p>
+    </div>
+
+    <div class="right-faq">
+      <p style="text-align: left;">
+        There are 5000 WonderlandWizards and there will only ever be 5000.
+      </p>
+    </div>
+  </div>    
+
+</div>  
+
+<div class='section' id='investments'>
+  <h1>Investments</h1>
+  <p style="white-space: pre-line; text-align: center;">
+    25% of the treasury will be delegated to staking $SPELL on abracadabra.money. The treasury will be generating 35% APR from $SPELL.
+
+    25% will be bridged to Avalanche and used to stake on Wonderland for 80000% APY.
+    
+    Another 50% will be used to make $STRONG nodes. Strong currently offers 0.1 $STRONG (currently around $50 at the time of writing) per node, every day. When you think about the fact that we could potentially make 30 nodes ($1500 a day) It isn’t hard to see how this could generate substantial rewards for holders and with compound interest, it is only going to get bigger and better.
+    
+    We also have a StonerApeClub NFT (0.22ETH or $600) ready to airdrop to a random holder. Can’t wait!
+  </p>
+  
+</div>
+
+<script type="text/javascript">(function(){window['__CF$cv$params']={r:'6dd01c72ecbe7447',m:'IuNRuaPiLsodu0XXWjzwUnNFSs634gOsjtTiC6i.brg-1644776850-0-ATxxVmwBhHTolpC0mQ4fZKthsFrQM1fBWYFKdqp0chiR3e0cccZp8w7cZ8Xwve+omAyhHvQG6AmfCuyGoitOvnWVO95Pl0kaVhVKMyqWgtw+hTXfx2LnjFzvJO67a0zW9tbb6sRZBfOscEUkwmshPj2ucpOEkn+yRcaD684Gh/PkKeo/ZZykjqLEJ0BBotJQYw==',s:[0x157f75db47,0xfdb7a85ebe],}})();</script><script type="text/javascript">(function(){window['__CF$cv$params']={r:'6ddf4f20c9818924',m:'MpKitAvy8.ShOXG8pakrjJOnpyrNah1Y3irdJrHDVhI-1644936212-0-Afmso2PHTG/THfPqAQmQjq1ffGsCexAUg0mw7MuuwHno9I8YrALme0Zvf7zxu6FzM197vt67DESe/nQRqajb04VTeC/qPngiTuFSAvm7AukjzFT95k9QJaBoHHzrqgIRHcaerysC8q/ZI+Bs/0PbXD0AnBdbDvAOE7Lg6sWeQiZ5iZu6QnRHddMUz16ZVTGnfg==',s:[0xc17d2d068b,0xc93c820369],}})();</script></body>
+</html>
