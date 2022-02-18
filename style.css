@@ -1,6 +1,7 @@
 /* Main site formatting */
 body {
   font-family: Garamond, serif;
+  color: white;
   font-size: 12px;
   justify-content: center;
   align-items: center;
